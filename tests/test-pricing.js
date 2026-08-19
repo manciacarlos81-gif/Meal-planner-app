@@ -238,6 +238,24 @@ dates.forEach(function (d) {
 truthy('most days land near the calorie and protein targets', short <= 3,
        short + ' target misses across the week');
 
+/* no recipe should appear twice in the SAME day — eating the identical dish
+   at breakfast and snack is the worst variety failure, and recentIds missed it
+   because dinners and lunches are filled in separate passes */
+var sameDayRepeats = 0;
+[42, 99, 7, 2024].forEach(function (sd) {
+  var w = Planner.fillWeek(dates, R.all, settings, sd);
+  dates.forEach(function (d) {
+    var seen = {};
+    Object.keys(w.plan[d]).forEach(function (slot) {
+      var e = w.plan[d][slot];
+      if (e.leftoverOf) return;   // a leftover IS the same dish on purpose
+      if (seen[e.recipeId]) sameDayRepeats++;
+      seen[e.recipeId] = true;
+    });
+  });
+});
+ok('no recipe repeats twice in one day', sameDayRepeats, 0);
+
 /* determinism: same seed, same plan */
 var again = Planner.fillWeek(dates, R.all, settings, 42);
 ok('same seed reproduces the plan',

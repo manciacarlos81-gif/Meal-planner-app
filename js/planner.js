@@ -111,8 +111,22 @@
    * giving real variety between seeds.
    */
   function pick(candidates, profiles, ctx) {
+    // Eating the SAME dish twice in one day is excluded, not penalised. It was
+    // tried as a score penalty first and wasn't enough: a standout-value recipe
+    // (cheap, calorie-dense oats) absorbed the penalty and still landed as both
+    // breakfast and snack on the same day. This is a hard rule, not a
+    // preference. If filtering empties the pool we fall back to the full pool —
+    // repeating beats leaving a meal slot blank.
+    var pool = candidates;
+    if (ctx.sameDayIds && ctx.sameDayIds.length) {
+      var filtered = candidates.filter(function (r) {
+        return ctx.sameDayIds.indexOf(r.id) === -1;
+      });
+      if (filtered.length) pool = filtered;
+    }
+
     var scored = [];
-    candidates.forEach(function (r) {
+    pool.forEach(function (r) {
       var prof = profiles[r.id];
       if (!prof || !prof.cost) return;
       scored.push({ prof: prof, score: score(prof, ctx) });
@@ -187,13 +201,20 @@
       if (recentIds.length > 3) recentIds.shift();
     }
 
-    function ctxFor(needKcal, needProtein) {
+    function ctxFor(needKcal, needProtein, date) {
       return {
         basket: basket, usedCount: usedCount, recentIds: recentIds,
+        sameDayIds: date ? idsOn(date) : null,
         needKcal: needKcal, needProtein: needProtein,
         overBudget: spend > (settings.weeklyBudget || Infinity),
         rand: rand
       };
+    }
+
+    /** recipeIds already placed on that day, so a dish never repeats in a day. */
+    function idsOn(date) {
+      var day = plan[date] || {};
+      return Object.keys(day).map(function (slot) { return day[slot].recipeId; });
     }
 
     /* ── Pass 1: dinners. They anchor the week and generate the leftovers. ── */
@@ -227,7 +248,7 @@
     /* ── Pass 2: breakfasts. ── */
     dates.forEach(function (date) {
       var prof = pick(byMeal.breakfast, profiles, ctxFor(settings.dailyKcal * 0.28,
-                                                         settings.dailyProtein * 0.28));
+                                                         settings.dailyProtein * 0.28, date));
       if (prof) commit(date, 'breakfast', prof, serveDefault);
     });
 
@@ -235,7 +256,7 @@
     dates.forEach(function (date) {
       if (plan[date].lunch) return;
       var prof = pick(byMeal.lunch, profiles, ctxFor(settings.dailyKcal * 0.3,
-                                                     settings.dailyProtein * 0.3));
+                                                     settings.dailyProtein * 0.3, date));
       if (prof) commit(date, 'lunch', prof, serveDefault);
     });
 
@@ -246,7 +267,7 @@
       var gapP = (settings.dailyProtein || 0) - day.protein;
       if (gapK < 150 && gapP < 15) return;   // close enough, don't force-feed
 
-      var prof = pick(byMeal.snack, profiles, ctxFor(gapK, gapP));
+      var prof = pick(byMeal.snack, profiles, ctxFor(gapK, gapP, date));
       if (prof) commit(date, 'snack', prof, serveDefault);
     });
 
