@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MealWise — Smart Meal Planning Made Simple</title>
+<meta name="description" content="Plan meals, track nutrition, and generate shopping lists in minutes. MealWise saves you 2+ hours a week with smart meal plans for keto, vegan, low-carb and more.">
+<meta name="theme-color" content="#16a34a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="MealWise — Smart Meal Planning Made Simple">
+<meta property="og:description" content="Plan meals, track nutrition, and generate shopping lists in minutes. Save 2+ hours a week.">
+<meta property="og:url" content="https://mealwise.app">
+<meta property="og:site_name" content="MealWise">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MealWise — Smart Meal Planning Made Simple">
+<meta name="twitter:description" content="Plan meals, track nutrition, and generate shopping lists in minutes. Save 2+ hours a week.">
+
+<style>
+:root {
+  --green-600: #16a34a;
+  --green-500: #22c55e;
+  --green-400: #4ade80;
+  --green-50: #f0fdf4;
+  --gray-900: #111827;
+  --gray-800: #1f2937;
+  --gray-700: #374151;
+  --gray-600: #4b5563;
+  --gray-400: #9ca3af;
+  --gray-200: #e5e7eb;
+  --gray-100: #f3f4f6;
+  --gray-50: #f9fafb;
+  --white: #ffffff;
+  --yellow-400: #facc15;
+  --blue-600: #2563eb;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  color: var(--gray-900);
+  background: var(--white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; height: auto; display: block; }
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ── Header ── */
+.header {
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--gray-200);
+  z-index: 100;
+  padding: 12px 0;
+}
+.header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--green-600);
+  letter-spacing: -0.02em;
+}
+.logo span { color: var(--gray-900); }
+.header-cta {
+  background: var(--green-600);
+  color: var(--white);
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: background 0.15s;
+}
+.header-cta:hover { background: var(--green-500); }
+
+/* ── Hero ── */
+.hero {
+  padding: 80px 0 60px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-block;
+  background: var(--green-50);
+  color: var(--green-600);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  max-width: 720px;
+  margin: 0 auto 16px;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--green-600);
+}
+.hero p {
+  font-size: 1.125rem;
+  color: var(--gray-600);
+  max-width: 560px;
+  margin: 0 auto 32px;
+}
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  background: var(--green-600);
+  color: var(--white);
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background 0.15s, transform 0.1s;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover { background: var(--green-500); transform: translateY(-1px); }
+.btn-secondary {
+  background: var(--white);
+  color: var(--gray-900);
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1.5px solid var(--gray-200);
+  transition: border-color 0.15s;
+  cursor: pointer;
+}
+.btn-secondary:hover { border-color: var(--gray-400); }
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  text-align: center;
+}
+.hero-stat strong {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--green-600);
+}
+.hero-stat span {
+  font-size: 0.8125rem;
+  color: var(--gray-600);
+}
+
+/* ── How It Works ── */
+.how-it-works {
+  padding: 80px 0;
+  background: var(--gray-50);
+}
+.section-label {
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--green-600);
+  margin-bottom: 8px;
+}
+.section-title {
+  text-align: center;
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 48px;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+}
+.step {
+  text-align: center;
+  padding: 32px 24px;
+}
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--green-600);
+  color: var(--white);
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 1.125rem;
+  margin-bottom: 16px;
+}
+.step h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.step p {
+  color: var(--gray-600);
+  font-size: 0.9375rem;
+}
+
+/* ── Features ── */
+.features {
+  padding: 80px 0;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.feature-card {
+  padding: 28px;
+  border: 1px solid var(--gray-200);
+  border-radius: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.feature-card:hover {
+  border-color: var(--green-400);
+  box-shadow: 0 4px 20px rgba(22, 163, 74, 0.08);
+}
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+.feature-card h3 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.feature-card p {
+  color: var(--gray-600);
+  font-size: 0.9375rem;
+}
+
+/* ── Pricing ── */
+.pricing {
+  padding: 80px 0;
+  background: var(--gray-50);
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.pricing-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 16px;
+  padding: 36px 28px;
+  position: relative;
+}
+.pricing-card.featured {
+  border-color: var(--green-600);
+  box-shadow: 0 8px 30px rgba(22, 163, 74, 0.12);
+}
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--green-600);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 16px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.pricing-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.pricing-card .price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 12px 0 4px;
+}
+.pricing-card .price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gray-600);
+}
+.pricing-card .price-note {
+  font-size: 0.8125rem;
+  color: var(--gray-600);
+  margin-bottom: 20px;
+}
+.pricing-card ul {
+  list-style: none;
+  margin-bottom: 28px;
+}
+.pricing-card li {
+  font-size: 0.9375rem;
+  padding: 6px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.pricing-card li::before {
+  content: '✓';
+  color: var(--green-600);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.pricing-card .btn-primary,
+.pricing-card .btn-secondary {
+  width: 100%;
+  text-align: center;
+  display: block;
+}
+
+/* ── Social Proof ── */
+.social-proof {
+  padding: 80px 0;
+}
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.testimonial {
+  background: var(--gray-50);
+  border-radius: 14px;
+  padding: 28px;
+}
+.testimonial-stars {
+  color: var(--yellow-400);
+  font-size: 1.125rem;
+  margin-bottom: 12px;
+}
+.testimonial p {
+  font-size: 0.9375rem;
+  color: var(--gray-700);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.testimonial-author {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.testimonial-role {
+  font-size: 0.8125rem;
+  color: var(--gray-600);
+}
+
+/* ── Final CTA ── */
+.final-cta {
+  padding: 80px 0;
+  background: var(--green-600);
+  color: var(--white);
+  text-align: center;
+}
+.final-cta h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.final-cta p {
+  font-size: 1.0625rem;
+  opacity: 0.9;
+  margin-bottom: 28px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.final-cta .btn-primary {
+  background: var(--white);
+  color: var(--green-600);
+}
+.final-cta .btn-primary:hover {
+  background: var(--green-50);
+}
+
+/* ── Footer ── */
+.footer {
+  padding: 40px 0;
+  border-top: 1px solid var(--gray-200);
+  text-align: center;
+}
+.footer p {
+  font-size: 0.8125rem;
+  color: var(--gray-600);
+}
+.footer a { color: var(--green-600); }
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 12px;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .hero { padding: 48px 0 40px; }
+  .hero-stats { gap: 24px; }
+  .hero-stat strong { font-size: 1.5rem; }
+  .how-it-works, .features, .pricing, .social-proof { padding: 56px 0; }
+  .section-title { margin-bottom: 32px; }
+  .features-grid, .pricing-grid, .testimonials {
+    grid-template-columns: 1fr;
+  }
+  .header-cta { padding: 6px 14px; font-size: 0.8125rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="container">
+    <div class="logo">Meal<span>Wise</span></div>
+    <a href="#pricing" class="header-cta">Get Started Free</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">Save 2+ hours every week</div>
+    <h1>Meal planning that <em>actually</em> saves you time</h1>
+    <p>Plan your week, track nutrition, and generate shopping lists in minutes — not hours. Hundreds of recipes for every diet.</p>
+    <div class="hero-buttons">
+      <a href="#pricing" class="btn-primary">Start Planning Free</a>
+      <a href="#how" class="btn-secondary">See How It Works</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>500+</strong>
+        <span>Recipes</span>
+      </div>
+      <div class="hero-stat">
+        <strong>6</strong>
+        <span>Diet Plans</span>
+      </div>
+      <div class="hero-stat">
+        <strong>5.0 ★</strong>
+        <span>App Store Rating</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works" id="how">
+  <div class="container">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">Three steps to stress-free meals</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Pick your plan</h3>
+        <p>Choose from keto, vegan, low-carb, vegetarian, gluten-free, or weight loss — or build your own from 500+ recipes.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Customise your week</h3>
+        <p>Assign meals to breakfast, lunch, dinner, and snack slots. Adjust servings, swap recipes, and see nutrition totals instantly.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Shop and cook</h3>
+        <p>Your shopping list generates automatically. Check items off as you go, then follow step-by-step cooking directions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything you need to eat well</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Smart Recipe Search</h3>
+        <p>Filter by cuisine, prep time, difficulty, dietary style, and calories. Find the right meal in seconds.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Flexible Meal Plans</h3>
+        <p>6 ready-made diet plans or fully custom schedules. Assign any recipe to any meal slot with one tap.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛒</div>
+        <h3>Auto Shopping List</h3>
+        <p>Turn your weekly plan into a grocery list instantly. Combines ingredients, shows totals, and checks off as you shop.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Nutrition Tracking</h3>
+        <p>Calories, carbs, fat, protein, fibre, and sugar for every recipe. Daily and weekly totals with clear charts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👨‍🍳</div>
+        <h3>Step-by-Step Cooking</h3>
+        <p>Follow clear directions for every recipe. Adjust servings and the ingredients scale automatically.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📤</div>
+        <h3>Export Anywhere</h3>
+        <p>Share recipes and shopping lists via clipboard, email, or PDF. Take your plan wherever you go.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Start free, upgrade when you're ready</h2>
+    <div class="pricing-grid">
+      <!-- Free -->
+      <div class="pricing-card">
+        <h3>Free</h3>
+        <div class="price">$0<span>/month</span></div>
+        <div class="price-note">No credit card required</div>
+        <ul>
+          <li>Browse 500+ recipes</li>
+          <li>3 pre-built meal plans</li>
+          <li>Basic nutrition info per recipe</li>
+          <li>Shopping list (up to 1 week)</li>
+          <li>Recipe search with filters</li>
+        </ul>
+        <a href="https://mealwise.app" class="btn-secondary">Get Started</a>
+      </div>
+      <!-- Pro -->
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <h3>Pro</h3>
+        <div class="price">$4.99<span>/month</span></div>
+        <div class="price-note">or $39.99/year (save 33%)</div>
+        <ul>
+          <li>Everything in Free</li>
+          <li>All 6 diet plans + unlimited custom plans</li>
+          <li>Advanced nutrition dashboard &amp; trends</li>
+          <li>AI-powered meal suggestions</li>
+          <li>Smart shopping list with aisle grouping</li>
+          <li>Family profiles (up to 4 members)</li>
+          <li>Meal plan history &amp; rollback</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="https://mealwise.app" class="btn-primary">Start 7-Day Free Trial</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Social Proof -->
+<section class="social-proof" id="reviews">
+  <div class="container">
+    <div class="section-label">Reviews</div>
+    <h2 class="section-title">Loved by home cooks everywhere</h2>
+    <div class="testimonials">
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p>"Very easy to use and helps me organise meals for the whole week. Love the clean design and easy navigation!"</p>
+        <div class="testimonial-author">Selim</div>
+        <div class="testimonial-role">App Store Review</div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p>"I used to spend Sunday afternoons planning meals. Now it takes me 10 minutes. The shopping list feature alone is worth it."</p>
+        <div class="testimonial-author">Maria K.</div>
+        <div class="testimonial-role">Pro subscriber</div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p>"Finally a meal planner that doesn't try to do everything. Simple, fast, and the keto plans are spot on."</p>
+        <div class="testimonial-author">James T.</div>
+        <div class="testimonial-role">Free user</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Ready to take the stress out of meal planning?</h2>
+    <p>Join thousands of home cooks who plan smarter, shop faster, and eat better.</p>
+    <a href="https://mealwise.app" class="btn-primary">Start Planning Free</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="https://apps.apple.com/app/id6468025453">App Store</a>
+    </div>
+    <p>&copy; 2026 MealWise. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
